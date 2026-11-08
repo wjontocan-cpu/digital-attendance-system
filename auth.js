@@ -1,126 +1,98 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.getElementById("loginForm");
+
+    const loginForm = document.getElementById("adminLoginForm");
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
     const loginMessage = document.getElementById("loginMessage");
 
-    const setupForm = document.getElementById("setupAdminForm");
-    const setupUsername = document.getElementById("setupUsername");
-    const setupPassword = document.getElementById("setupPassword");
-    const setupMessage = document.getElementById("setupMessage");
+    const togglePassword = document.getElementById("togglePassword");
+    const forgotPassword = document.getElementById("forgotPassword");
 
-    // Check if an admin account already exists
-    const adminAccount = localStorage.getItem("das_admin");
+    // PASSWORD SHOW / HIDE
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", function () {
 
-    if (setupForm && loginForm) {
-        if (!adminAccount) {
-            setupForm.style.display = "block";
-            loginForm.style.display = "none";
-        } else {
-            setupForm.style.display = "none";
-            loginForm.style.display = "block";
-        }
-    }
-
-    // Create the first admin account
-    if (setupForm) {
-        setupForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const username = setupUsername.value.trim();
-            const password = setupPassword.value;
-
-            if (username.length < 4) {
-                showMessage(setupMessage, "Username must be at least 4 characters.", "error");
-                return;
-            }
-
-            if (password.length < 8) {
-                showMessage(setupMessage, "Password must be at least 8 characters.", "error");
-                return;
-            }
-
-            if (typeof setupAdmin === "function") {
-                setupAdmin(username, password);
-
-                showMessage(
-                    setupMessage,
-                    "Admin account created successfully!",
-                    "success"
-                );
-
-                setupForm.style.display = "none";
-                loginForm.style.display = "block";
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePassword.textContent = "🙈";
+                togglePassword.setAttribute("aria-label", "Hide password");
             } else {
-                showMessage(
-                    setupMessage,
-                    "Setup function is missing. Please check script.js.",
-                    "error"
-                );
+                passwordInput.type = "password";
+                togglePassword.textContent = "👁";
+                togglePassword.setAttribute("aria-label", "Show password");
             }
+
         });
     }
 
-    // Admin login
+    // ADMIN LOGIN
     if (loginForm) {
         loginForm.addEventListener("submit", function (event) {
+
             event.preventDefault();
 
             const username = usernameInput.value.trim();
             const password = passwordInput.value;
 
             if (!username || !password) {
-                showMessage(loginMessage, "Please enter your username and password.", "error");
+                showMessage("Please enter your username and password.", "error");
                 return;
             }
 
-            if (typeof adminLogin === "function") {
-                const success = adminLogin(username, password);
+            const adminData = JSON.parse(
+                localStorage.getItem("das_admin") || "null"
+            );
 
-                if (success) {
-                    showMessage(loginMessage, "Login successful!", "success");
-                    window.location.href = "dashboard.html";
-                } else {
-                    showMessage(
-                        loginMessage,
-                        "Incorrect username or password.",
-                        "error"
-                    );
-                }
-            } else {
+            if (!adminData) {
                 showMessage(
-                    loginMessage,
-                    "Login function is missing. Please check script.js.",
+                    "No admin account found. Please configure the admin account first.",
                     "error"
                 );
+                return;
             }
-        });
-    }
 
-    // Password visibility toggle
-    document.querySelectorAll(".toggle-password").forEach(function (button) {
-        button.addEventListener("click", function () {
-            const wrapper = button.parentElement;
-            const input = wrapper.querySelector("input");
+            if (
+                adminData.username === username &&
+                adminData.password === password
+            ) {
+                localStorage.setItem("das_session", JSON.stringify({
+                    username: username,
+                    loggedIn: true,
+                    loginDate: new Date().toISOString()
+                }));
 
-            if (!input) return;
+                showMessage("Login successful!", "success");
 
-            if (input.type === "password") {
-                input.type = "text";
-                button.textContent = "Hide";
+                setTimeout(function () {
+                    window.location.href = "dashboard.html";
+                }, 500);
+
             } else {
-                input.type = "password";
-                button.textContent = "Show";
+                showMessage("Incorrect username or password.", "error");
             }
+
         });
-    });
-
-    function showMessage(element, message, type) {
-        if (!element) return;
-
-        element.textContent = message;
-        element.className = "message " + type;
-        element.style.display = "block";
     }
+
+    // FORGOT PASSWORD
+    if (forgotPassword) {
+        forgotPassword.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            alert(
+                "Please contact the system administrator to reset your password."
+            );
+        });
+    }
+
+    // MESSAGE DISPLAY
+    function showMessage(message, type) {
+        if (!loginMessage) return;
+
+        loginMessage.textContent = message;
+        loginMessage.className = "login-message " + type;
+        loginMessage.style.display = "block";
+    }
+
 });
