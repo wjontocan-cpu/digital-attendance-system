@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Record | Digital Attendance System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .attendance-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #102b50;
+            color: white;
+            padding: 25px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 35px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            color: #dce7f5;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2463b4;
+            color: white;
+        }
+
+        .logout-link {
+            margin-top: auto;
+            background: #c0392b;
+        }
+
+        .attendance-main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            color: #102b50;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .attendance-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .toolbar input,
+        .toolbar select {
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .toolbar input[type="search"] {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .export-button {
+            padding: 11px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #2463b4;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .export-button:hover {
+            background: #174a88;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        thead {
+            background: #edf4ff;
+        }
+
+        th {
+            color: #174a88;
+            text-align: left;
+            padding: 14px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-present {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-absent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .empty-message {
+            padding: 25px;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 700px) {
+            .attendance-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .attendance-main {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="attendance-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            Digital Attendance System
+        </div>
+
+        <a href="dashboard.html">⌂ Home</a>
+        <a href="employee.html">▣ Employees</a>
+        <a href="employee.html#registration">＋ Employee Registration</a>
+        <a href="attendance.html" class="active">◷ Attendance Record</a>
+        <a href="monthly-record.html">▤ Monthly Record</a>
+
+        <a href="#" class="logout-link" onclick="logout(); return false;">
+            ↪ Logout
+        </a>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="attendance-main">
+
+        <header class="page-header">
+            <h1>Attendance Record</h1>
+            <p>Monitor and review employee daily attendance.</p>
+        </header>
+
+        <section class="attendance-card">
+
+            <!-- FILTERS -->
+            <div class="toolbar">
+
+                <input
+                    type="search"
+                    id="attendanceSearch"
+                    placeholder="Search Employee ID or Name..."
+                >
+
+                <select id="departmentFilter">
+                    <option value="All">All Departments</option>
+                    <option value="BSCRIM">BSCRIM</option>
+                    <option value="BSIT">BSIT</option>
+                    <option value="BSHM">BSHM</option>
+                    <option value="BSED">BSED</option>
+                    <option value="BSBA">BSBA</option>
+                    <option value="BEED">BEED</option>
+                </select>
+
+                <input type="date" id="dateFilter">
+
+                <button class="export-button" onclick="exportAttendanceCSV()">
+                    Export CSV
+                </button>
+
+            </div>
+
+            <!-- ATTENDANCE TABLE -->
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-message">
+                                No attendance records available.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        if (typeof checkAdminSession === "function") {
+            checkAdminSession();
+        }
+
+        displayAttendance();
+
+        document.getElementById("attendanceSearch")
+            .addEventListener("input", filterAttendance);
+
+        document.getElementById("departmentFilter")
+            .addEventListener("change", filterAttendance);
+
+        document.getElementById("dateFilter")
+            .addEventListener("change", filterAttendance);
+
+    });
+
+    function filterAttendance() {
+
+        const search = document.getElementById("attendanceSearch")
+            .value.toLowerCase();
+
+        const department = document.getElementById("departmentFilter")
+            .value;
+
+        const date = document.getElementById("dateFilter")
+            .value;
+
+        const records = getAttendance();
+
+        const filtered = records.filter(record => {
+
+            const matchesSearch =
+                record.employeeID.toLowerCase().includes(search) ||
+                record.employeeName.toLowerCase().includes(search);
+
+            const matchesDepartment =
+                department === "All" ||
+                record.department === department;
+
+            const matchesDate =
+                date === "" ||
+                record.date === date;
+
+            return matchesSearch && matchesDepartment && matchesDate;
+
+        });
+
+        const tableBody = document.getElementById("attendanceTableBody");
+
+        tableBody.innerHTML = "";
+
+        if (filtered.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty-message">
+                        No matching attendance records found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        filtered.forEach(record => {
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${escapeHTML(record.employeeID)}</td>
+                <td>${escapeHTML(record.employeeName)}</td>
+                <td>${escapeHTML(record.department)}</td>
+                <td>${escapeHTML(record.date)}</td>
+                <td>${escapeHTML(record.timeIn || "-")}</td>
+                <td>${escapeHTML(record.timeOut || "-")}</td>
+                <td>
+                    <span class="status-badge status-present">
+                        ${escapeHTML(record.status)}
+                    </span>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+
+        });
+
+    }
+
+    function exportAttendanceCSV() {
+
+        const records = getAttendance();
+
+        if (records.length === 0) {
+            alert("No attendance records to export.");
+            return;
+        }
+
+        const headers = [
+            "Employee ID",
+            "Employee Name",
+            "Department",
+            "Date",
+            "Time In",
+            "Time Out",
+            "Status"
+        ];
+
+        const rows = records.map(record => [
+            record.employeeID,
+            record.employeeName,
+            record.department,
+            record.date,
+            record.timeIn || "",
+            record.timeOut || "",
+            record.status
+        ]);
+
+        const csvContent = [headers, ...rows]
+            .map(row =>
+                row.map(value =>
+                    '"' + String(value).replace(/"/g, '""') + '"'
+                ).join(",")
+            )
+            .join("\n");
+
+        const blob = new Blob(
+            ["\uFEFF" + csvContent],
+            { type: "text/csv;charset=utf-8;" }
+        );
+
+        const link = document.createElement("a");
+
+        link.href = URL.createObjectURL(blob);
+        link.download = "Attendance_Record.csv";
+
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+
+    }
+</script>
+
+</body>
+</html>
