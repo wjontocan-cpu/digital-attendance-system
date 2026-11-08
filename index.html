@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,96 +6,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Attendance System</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-    <!-- LOGIN PAGE -->
-    <section id="loginPage" class="login-page">
-
-        <div class="login-background"></div>
+    <div class="login-page">
 
         <div class="login-container">
 
             <!-- LEFT SIDE -->
-            <div class="login-branding">
+            <div class="login-left">
 
-                <div class="brand-content">
+                <div class="brand">
+                    <div class="brand-icon">DA</div>
+                    <span>Digital Attendance</span>
+                </div>
 
-                    <h1 class="system-title">
-                        Digital Attendance System
-                    </h1>
+                <div class="welcome-content">
+                    <h1>Digital Attendance System</h1>
 
-                    <p class="system-tagline">
+                    <p class="tagline">
                         Track. Manage. Monitor.
                     </p>
 
+                    <p class="description">
+                        A simple and efficient attendance management
+                        system designed for faculty and staff.
+                    </p>
+                </div>
+
+                <div class="login-footer">
+                    © 2026 Digital Attendance System
                 </div>
 
             </div>
 
             <!-- RIGHT SIDE -->
-            <div class="login-panel">
+            <div class="login-right">
 
-                <div class="login-box">
+                <div class="login-form-wrapper">
 
-                    <div class="login-logo">
-                        <span class="logo-icon">📅</span>
+                    <div class="form-heading">
+                        <h2>Admin Login</h2>
+                        <p>Sign in to access your dashboard.</p>
                     </div>
-
-                    <h2>Admin Login</h2>
-
-                    <p class="login-description">
-                        Please enter your credentials to access the dashboard.
-                    </p>
 
                     <form id="adminLoginForm">
 
                         <div class="form-group">
-                            <label for="adminUsername">Username</label>
+                            <label for="username">Username</label>
 
                             <input
                                 type="text"
-                                id="adminUsername"
+                                id="username"
+                                name="username"
                                 placeholder="Enter your username"
                                 required
+                                autocomplete="username"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="adminPassword">Password</label>
+                            <label for="password">Password</label>
 
-                            <div class="password-field">
-
+                            <div class="password-wrapper">
                                 <input
                                     type="password"
-                                    id="adminPassword"
+                                    id="password"
+                                    name="password"
                                     placeholder="Enter your password"
                                     required
+                                    autocomplete="current-password"
                                 >
 
                                 <button
                                     type="button"
-                                    id="togglePassword"
                                     class="password-toggle"
+                                    id="togglePassword"
+                                    aria-label="Show password"
                                 >
                                     👁
                                 </button>
-
                             </div>
                         </div>
 
-                        <div class="login-options">
-
+                        <div class="forgot-password">
                             <a href="#" id="forgotPassword">
                                 Forgot Password?
                             </a>
-
                         </div>
 
                         <button type="submit" class="login-button">
-                            Login
+                            Sign In
                         </button>
 
                         <p id="loginMessage" class="login-message"></p>
@@ -107,792 +110,9 @@
 
         </div>
 
-    </section>
+    </div>
 
-
-    <!-- ADMIN DASHBOARD -->
-    <section id="dashboardPage" class="dashboard-page" style="display: none;">
-
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-
-            <div class="sidebar-brand">
-
-                <div class="sidebar-logo">📅</div>
-
-                <div>
-                    <h2>Digital Attendance</h2>
-                    <p>Faculty and Staff</p>
-                </div>
-
-            </div>
-
-            <nav class="sidebar-menu">
-
-                <a href="#" class="menu-item active" data-page="dashboard">
-                    <span>🏠</span>
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="#" class="menu-item" data-page="employeeRegistration">
-                    <span>👤</span>
-                    <span>Employee Registration</span>
-                </a>
-
-                <a href="#" class="menu-item" data-page="attendanceRecord">
-                    <span>📋</span>
-                    <span>Attendance Record</span>
-                </a>
-
-                <a href="#" class="menu-item" data-page="monthlyRecord">
-                    <span>📅</span>
-                    <span>Monthly Record</span>
-                </a>
-
-            </nav>
-
-            <div class="sidebar-bottom">
-
-                <button id="logoutButton" class="logout-button">
-                    <span>🚪</span>
-                    Logout
-                </button>
-
-            </div>
-
-        </aside>
-
-
-        <!-- MAIN CONTENT -->
-        <main class="main-content">
-
-            <!-- TOP HEADER -->
-            <header class="dashboard-header">
-
-                <div class="header-left">
-
-                    <h1 id="pageTitle">Dashboard</h1>
-
-                    <p id="pageSubtitle">
-                        Welcome to your Digital Attendance System.
-                    </p>
-
-                </div>
-
-                <div class="header-right">
-
-                    <div class="admin-profile">
-
-                        <div class="admin-avatar">A</div>
-
-                        <div class="admin-info">
-                            <h3>Administrator</h3>
-                            <p>Admin</p>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </header>
-
-
-            <!-- DASHBOARD OVERVIEW -->
-            <section id="dashboardOverview" class="content-page">
-
-                <!-- TODAY'S ATTENDANCE -->
-                <div class="today-attendance-section">
-
-                    <div class="section-heading">
-
-                        <div>
-                            <h2>Today's Attendance</h2>
-
-                            <p>
-                                Overview of today's faculty and staff attendance.
-                            </p>
-                        </div>
-
-                        <div class="today-date">
-                            <span>📅</span>
-                            <span id="todayDate">Today's Date</span>
-                        </div>
-
-                    </div>
-
-
-                    <!-- ATTENDANCE CARDS -->
-                    <div class="attendance-summary-cards">
-
-                        <div class="summary-card employees-card">
-
-                            <div class="summary-card-icon">👥</div>
-
-                            <div class="summary-card-info">
-                                <p>Total Employees</p>
-                                <h2 id="totalEmployees">0</h2>
-                            </div>
-
-                        </div>
-
-                        <div class="summary-card present-card">
-
-                            <div class="summary-card-icon">✔</div>
-
-                            <div class="summary-card-info">
-                                <p>Present</p>
-                                <h2 id="presentCount">0</h2>
-                            </div>
-
-                        </div>
-
-                        <div class="summary-card absent-card">
-
-                            <div class="summary-card-icon">✖</div>
-
-                            <div class="summary-card-info">
-                                <p>Absent</p>
-                                <h2 id="absentCount">0</h2>
-                            </div>
-
-                        </div>
-
-                        <div class="summary-card on-time-card">
-
-                            <div class="summary-card-icon">⏰</div>
-
-                            <div class="summary-card-info">
-                                <p>On Time</p>
-                                <h2 id="onTimeCount">0</h2>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- DASHBOARD LOWER CONTENT -->
-                <div class="dashboard-lower-content">
-
-                    <!-- ATTENDANCE CHART -->
-                    <div class="dashboard-card attendance-chart-card">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h2>Attendance Overview</h2>
-                                <p>Today's attendance summary</p>
-                            </div>
-
-                        </div>
-
-                        <div class="attendance-chart-container">
-
-                            <div id="attendanceChart" class="attendance-chart">
-
-                                <div class="chart-center">
-                                    <h2 id="chartTotal">0</h2>
-                                    <p>Employees</p>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="chart-legend">
-
-                            <div class="legend-item">
-                                <span class="legend-color present-color"></span>
-                                <span>Present</span>
-                            </div>
-
-                            <div class="legend-item">
-                                <span class="legend-color absent-color"></span>
-                                <span>Absent</span>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- QUICK ACTIONS -->
-                    <div class="dashboard-card quick-actions-card">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h2>Quick Actions</h2>
-                                <p>Manage attendance easily</p>
-                            </div>
-
-                        </div>
-
-                        <div class="quick-actions">
-
-                            <button
-                                class="quick-action-button"
-                                data-page="employeeRegistration"
-                            >
-                                <span class="quick-action-icon">👤</span>
-
-                                <div>
-                                    <h3>Employee Registration</h3>
-                                    <p>Register a new employee</p>
-                                </div>
-
-                                <span class="action-arrow">›</span>
-                            </button>
-
-
-                            <button
-                                class="quick-action-button"
-                                data-page="attendanceRecord"
-                            >
-                                <span class="quick-action-icon">📋</span>
-
-                                <div>
-                                    <h3>Attendance Record</h3>
-                                    <p>View daily attendance</p>
-                                </div>
-
-                                <span class="action-arrow">›</span>
-                            </button>
-
-
-                            <button
-                                class="quick-action-button"
-                                data-page="monthlyRecord"
-                            >
-                                <span class="quick-action-icon">📅</span>
-
-                                <div>
-                                    <h3>Monthly Record</h3>
-                                    <p>View monthly attendance</p>
-                                </div>
-
-                                <span class="action-arrow">›</span>
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- EMPLOYEE REGISTRATION -->
-            <section
-                id="employeeRegistrationPage"
-                class="content-page"
-                style="display: none;"
-            >
-
-                <div class="dashboard-card registration-card">
-
-                    <div class="card-header">
-
-                        <div>
-                            <h2>Employee Registration</h2>
-
-                            <p>
-                                Register your information to use the attendance system.
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <form id="employeeRegistrationForm">
-
-                        <div class="form-row">
-
-                            <div class="form-group">
-                                <label for="employeeID">Employee ID</label>
-
-                                <input
-                                    type="text"
-                                    id="employeeID"
-                                    placeholder="Enter Employee ID"
-                                    required
-                                >
-                            </div>
-
-                            <div class="form-group">
-                                <label for="employeeName">Employee Name</label>
-
-                                <input
-                                    type="text"
-                                    id="employeeName"
-                                    placeholder="Enter Employee Name"
-                                    required
-                                >
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-row">
-
-                            <div class="form-group">
-                                <label for="employeePosition">Position</label>
-
-                                <select id="employeePosition" required>
-
-                                    <option value="">Select Position</option>
-                                    <option value="Faculty">Faculty</option>
-                                    <option value="Staff">Staff</option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="employeeDepartment">Department</label>
-
-                                <select id="employeeDepartment" required>
-
-                                    <option value="">Select Department</option>
-                                    <option value="BSCRIM">BSCRIM</option>
-                                    <option value="BSIT">BSIT</option>
-                                    <option value="BSHM">BSHM</option>
-                                    <option value="BSED">BSED</option>
-                                    <option value="BSBA">BSBA</option>
-                                    <option value="BEED">BEED</option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label for="employeePassword">
-                                Personal Password
-                            </label>
-
-                            <input
-                                type="password"
-                                id="employeePassword"
-                                placeholder="Create your personal password"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-buttons">
-
-                            <button type="reset" class="cancel-button">
-                                Clear
-                            </button>
-
-                            <button type="submit" class="save-button">
-                                Save Employee
-                            </button>
-
-                        </div>
-
-                        <p id="registrationMessage"></p>
-
-                    </form>
-
-                </div>
-
-            </section>
-
-
-            <!-- ATTENDANCE RECORD -->
-            <section
-                id="attendanceRecordPage"
-                class="content-page"
-                style="display: none;"
-            >
-
-                <div class="dashboard-card">
-
-                    <div class="card-header">
-
-                        <div>
-                            <h2>Attendance Record</h2>
-
-                            <p>
-                                View and monitor employee attendance records.
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <!-- DEPARTMENT FOLDERS -->
-                    <div class="department-folder-container">
-
-                        <button class="department-folder" data-department="BSCRIM">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSCRIM</h3>
-                        </button>
-
-                        <button class="department-folder" data-department="BSIT">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSIT</h3>
-                        </button>
-
-                        <button class="department-folder" data-department="BSHM">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSHM</h3>
-                        </button>
-
-                        <button class="department-folder" data-department="BSED">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSED</h3>
-                        </button>
-
-                        <button class="department-folder" data-department="BSBA">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSBA</h3>
-                        </button>
-
-                        <button class="department-folder" data-department="BEED">
-                            <span class="folder-icon">📁</span>
-                            <h3>BEED</h3>
-                        </button>
-
-                    </div>
-
-
-                    <!-- RECORD TABLE -->
-                    <div id="departmentAttendanceRecords" style="display: none;">
-
-                        <div class="record-toolbar">
-
-                            <h2 id="attendanceDepartmentTitle">
-                                Department Attendance
-                            </h2>
-
-                            <div class="record-filters">
-
-                                <input
-                                    type="date"
-                                    id="attendanceDateFilter"
-                                >
-
-                                <button id="backToDepartments">
-                                    Back to Departments
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="table-container">
-
-                            <table class="attendance-table">
-
-                                <thead>
-                                    <tr>
-                                        <th>Employee ID</th>
-                                        <th>Employee Name</th>
-                                        <th>Department</th>
-                                        <th>Date</th>
-                                        <th>Time In</th>
-                                        <th>Time Out</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="attendanceTableBody">
-
-                                    <tr>
-                                        <td colspan="7">
-                                            No attendance records available.
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- MONTHLY RECORD -->
-            <section
-                id="monthlyRecordPage"
-                class="content-page"
-                style="display: none;"
-            >
-
-                <div class="dashboard-card">
-
-                    <div class="card-header">
-
-                        <div>
-                            <h2>Monthly Record</h2>
-
-                            <p>
-                                View employee attendance records by month and department.
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <!-- MONTHLY DEPARTMENT FOLDERS -->
-                    <div class="department-folder-container">
-
-                        <button class="monthly-department-folder" data-department="BSCRIM">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSCRIM</h3>
-                        </button>
-
-                        <button class="monthly-department-folder" data-department="BSIT">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSIT</h3>
-                        </button>
-
-                        <button class="monthly-department-folder" data-department="BSHM">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSHM</h3>
-                        </button>
-
-                        <button class="monthly-department-folder" data-department="BSED">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSED</h3>
-                        </button>
-
-                        <button class="monthly-department-folder" data-department="BSBA">
-                            <span class="folder-icon">📁</span>
-                            <h3>BSBA</h3>
-                        </button>
-
-                        <button class="monthly-department-folder" data-department="BEED">
-                            <span class="folder-icon">📁</span>
-                            <h3>BEED</h3>
-                        </button>
-
-                    </div>
-
-
-                    <!-- MONTHLY TABLE -->
-                    <div id="monthlyDepartmentRecords" style="display: none;">
-
-                        <div class="record-toolbar">
-
-                            <h2 id="monthlyDepartmentTitle">
-                                Monthly Attendance
-                            </h2>
-
-                            <div class="record-filters">
-
-                                <select id="monthlyFilter">
-
-                                    <option value="">Select Month</option>
-                                    <option value="01">January</option>
-                                    <option value="02">February</option>
-                                    <option value="03">March</option>
-                                    <option value="04">April</option>
-                                    <option value="05">May</option>
-                                    <option value="06">June</option>
-                                    <option value="07">July</option>
-                                    <option value="08">August</option>
-                                    <option value="09">September</option>
-                                    <option value="10">October</option>
-                                    <option value="11">November</option>
-                                    <option value="12">December</option>
-
-                                </select>
-
-
-                                <select id="monthlyYearFilter">
-
-                                    <option value="">Select Year</option>
-
-                                </select>
-
-
-                                <button id="backToMonthlyDepartments">
-                                    Back to Departments
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="table-container">
-
-                            <table class="attendance-table">
-
-                                <thead>
-                                    <tr>
-                                        <th>Employee ID</th>
-                                        <th>Employee Name</th>
-                                        <th>Department</th>
-                                        <th>Date</th>
-                                        <th>Time In</th>
-                                        <th>Time Out</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="monthlyTableBody">
-
-                                    <tr>
-                                        <td colspan="7">
-                                            No monthly records available.
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- FOOTER -->
-            <footer class="dashboard-footer">
-
-                <p>
-                    © 2026 Digital Attendance System for Faculty and Staff
-                </p>
-
-            </footer>
-
-        </main>
-
-    </section>
-
-
-    <!-- EMPLOYEE TIME IN / TIME OUT PAGE -->
-    <section id="employeeAttendancePage" style="display: none;">
-
-        <div class="employee-attendance-container">
-
-            <div class="employee-attendance-header">
-
-                <h1>Digital Attendance System</h1>
-
-                <p>Track. Manage. Monitor.</p>
-
-            </div>
-
-
-            <div class="employee-attendance-card">
-
-                <h2>Employee Attendance</h2>
-
-                <p>
-                    Enter your registered information to record your attendance.
-                </p>
-
-
-                <form id="employeeAttendanceForm">
-
-                    <div class="form-group">
-
-                        <label for="attendanceEmployeeID">
-                            Employee ID
-                        </label>
-
-                        <input
-                            type="text"
-                            id="attendanceEmployeeID"
-                            placeholder="Enter Employee ID"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="attendanceEmployeeName">
-                            Employee Name
-                        </label>
-
-                        <input
-                            type="text"
-                            id="attendanceEmployeeName"
-                            placeholder="Enter Employee Name"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="attendanceEmployeePassword">
-                            Personal Password
-                        </label>
-
-                        <input
-                            type="password"
-                            id="attendanceEmployeePassword"
-                            placeholder="Enter your password"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="employee-attendance-buttons">
-
-                        <button type="button" id="timeInButton">
-                            Time In
-                        </button>
-
-                        <button type="button" id="timeOutButton">
-                            Time Out
-                        </button>
-
-                    </div>
-
-                    <p id="employeeAttendanceMessage"></p>
-
-                </form>
-
-
-                <div class="employee-registration-link">
-
-                    <p>
-                        Not registered yet?
-                        <a href="#" id="employeeRegisterLink">
-                            Register here
-                        </a>
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- JAVASCRIPT -->
-    <script src="script.js"></script>
+    <script src="js/auth.js"></script>
 
 </body>
 </html>
