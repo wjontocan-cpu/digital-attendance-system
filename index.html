@@ -4,610 +4,1742 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Digital Attendance System</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f3f6fc;color:#142747}
-button{cursor:pointer;border:0;border-radius:9px;padding:12px;font-weight:bold}
-.hidden{display:none!important}
-:root{--blue:#075be8;--navy:#071d3b;--border:#dce5f3}
-
-.login-page{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(130deg,#0571ed,#061f4d);padding:24px;gap:24px}
-.login-brand{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:white;padding:30px}
-.login-brand i{font-size:80px}
-.login-brand h1{font-size:40px}
-.login-card{width:min(440px,100%);background:white;padding:35px;border-radius:20px;text-align:center}
-.login-panel{display:flex;align-items:center;justify-content:center}
-.field{position:relative;margin:14px 0}
-.field input,.field select{width:100%;padding:13px;border:1px solid var(--border);border-radius:10px}
-.eye{position:absolute;right:13px;top:14px;cursor:pointer;color:#536783}
-.login-submit{width:100%;background:var(--blue);color:white;padding:14px}
-
-.app{min-height:100vh;display:flex}
-.sidebar{width:245px;background:var(--navy);color:white;display:flex;flex-direction:column;padding:16px 12px}
-.logo{text-align:center;padding:10px 8px 24px}
-.logo i{font-size:42px;color:#8dc6ff}
-.nav{display:grid;gap:7px}
-.nav button{background:transparent;color:white;text-align:left}
-.nav button.active,.nav button:hover{background:var(--blue)}
-.logout{margin-top:20px}
-.main{flex:1;min-width:0}
-.topbar{height:62px;background:white;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 24px}
-.page{padding:24px}
-.banner{background:linear-gradient(110deg,#fff,#e2efff);border-radius:16px;padding:25px;margin-bottom:20px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat{padding:20px;border-radius:14px;text-align:center;background:#e4efff}
-.stat i{font-size:30px;color:var(--blue)}
-.stat strong{font-size:28px}
-.stat.green{background:#dff7ec}
-.stat.red{background:#ffeaec}
-.stat.purple{background:#eee7ff}
-.quick,.panel{background:white;border:1px solid var(--border);border-radius:14px;padding:22px}
-.quick-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.quick-buttons button{background:#eaf2ff;color:#174178}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-label{display:block;font-weight:bold;font-size:13px;margin-bottom:7px}
-.actions{margin-top:20px;display:flex;gap:10px}
-.primary{background:var(--blue);color:white}
-.secondary{background:white;border:1px solid #b9c8dd}
-.attendance-box{max-width:800px;margin:30px auto;text-align:center;background:white;border:1px solid var(--border);border-radius:20px;padding:32px}
-.clock{font-size:56px;color:var(--blue)}
-.time-buttons{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
-.time-buttons button{padding:22px;font-size:20px}
-.timein{background:#0ca653;color:white}
-.timeout{background:var(--blue);color:white}
-.departments{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.folder{background:white;border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center}
-.folder i{font-size:54px;color:#f2b52c}
-.folder:hover{border-color:var(--blue)}
-.filter{display:flex;gap:12px;align-items:center;margin:18px 0}
-.filter input{padding:10px;border:1px solid var(--border);border-radius:8px}
-.back{background:#eaf1ff;color:#164a99}
-table{width:100%;border-collapse:collapse;background:white}
-th,td{padding:12px;border-bottom:1px solid #e8eef7;text-align:left}
-th{background:#eaf2ff}
-.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
-.empty{text-align:center;padding:25px;color:#72819a}
-.toast{position:fixed;right:20px;bottom:20px;background:#09244b;color:white;padding:14px;border-radius:10px}
-
-@media(max-width:900px){
-.login-page{grid-template-columns:1fr}
-.stats{grid-template-columns:repeat(2,1fr)}
-.departments{grid-template-columns:repeat(2,1fr)}
+:root {
+    --blue: #0961e8;
+    --dark: #082650;
+    --green: #12a653;
+    --red: #e5394f;
+    --purple: #7444e8;
+    --bg: #f3f7fd;
+    --text: #14294a;
 }
-@media(max-width:620px){
-.app{display:block}
-.sidebar{width:100%}
-.stats,.departments,.form-grid,.quick-buttons,.time-buttons{grid-template-columns:1fr}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5e0ef;
+    border-radius: 10px;
+    background: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* LOGIN PAGE */
+
+.login-wrap {
+    min-height: 100vh;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: linear-gradient(135deg, #d8eaff, #f5f9ff);
+}
+
+.hero {
+    min-height: 600px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #1679e9, #062a61);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero h1 {
+    font-size: clamp(35px, 4vw, 58px);
+    line-height: 1.1;
+    margin: 15px 0;
+}
+
+.hero-icon {
+    font-size: 75px;
+}
+
+.hero .welcome {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.hero .track {
+    font-size: 20px;
+    font-style: italic;
+    margin-top: 30px;
+}
+
+.people {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.person {
+    width: 95px;
+    height: 120px;
+    border-radius: 60px 60px 20px 20px;
+    background: linear-gradient(#fff, #dcecff);
+    position: relative;
+}
+
+.person:before {
+    content: "";
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background: #f2c7a6;
+    border: 4px solid #243e69;
+    border-radius: 50%;
+    top: 10px;
+    left: 22px;
+}
+
+.person:after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 65px;
+    background: #1670df;
+    border-radius: 15px;
+    bottom: 0;
+    left: 17px;
+}
+
+.person.girl:after {
+    background: #ed7195;
+}
+
+.login-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    background: white;
+    width: min(100%, 460px);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 45px #174b8c20;
+}
+
+.shield {
+    font-size: 55px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-card h2 {
+    text-align: center;
+    font-size: 32px;
+    margin: 0;
+}
+
+.sub {
+    text-align: center;
+    color: #687b99;
+    margin-bottom: 25px;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.password-wrap {
+    position: relative;
+}
+
+.password-wrap input {
+    padding-right: 45px;
+}
+
+.eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #526987;
+}
+
+.forgot {
+    text-align: right;
+    margin-bottom: 18px;
+}
+
+.forgot button {
+    background: none;
+    border: none;
+    color: var(--blue);
+    font-weight: bold;
+}
+
+.primary {
+    background: linear-gradient(100deg, #0870f5, #084fc7);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 18px;
+    font-weight: bold;
+}
+
+.login-submit {
+    width: 100%;
+    font-size: 17px;
+}
+
+.hint {
+    text-align: center;
+    color: #8090a7;
+    font-size: 12px;
+    margin-top: 18px;
+}
+
+/* DASHBOARD */
+
+.app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #071d3d, #092a55);
+    color: white;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ffffff20;
+}
+
+.brand-icon {
+    font-size: 40px;
+}
+
+.brand h2 {
+    font-size: 19px;
+}
+
+.brand small {
+    color: #a8c5ee;
+}
+
+.nav {
+    display: grid;
+    gap: 7px;
+    margin-top: 20px;
+}
+
+.nav button {
+    background: transparent;
+    color: #d8e6ff;
+    text-align: left;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+}
+
+.nav button.active,
+.nav button:hover {
+    background: var(--blue);
+    color: white;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.profile {
+    margin-bottom: 15px;
+}
+
+.logout {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 12px;
+}
+
+.main {
+    padding: 22px;
+    min-width: 0;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.topbar h1 {
+    font-size: 29px;
+    margin: 0 0 5px;
+}
+
+.topbar p {
+    color: #687b99;
+    margin: 0;
+}
+
+.banner {
+    background: linear-gradient(110deg, #e4f1ff, #f8fbff);
+    border: 1px solid #e0ecfb;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.banner h2 {
+    margin: 0 0 7px;
+}
+
+.banner p {
+    margin: 0;
+    color: #687b99;
+}
+
+/* DASHBOARD STATISTICS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.stat {
+    padding: 18px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat .symbol {
+    font-size: 28px;
+}
+
+.stat .label {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.stat .number {
+    font-size: 28px;
+    font-weight: 850;
+}
+
+.stat.blue {
+    background: #e3efff;
+    color: #075bc9;
+}
+
+.stat.green {
+    background: #dcf7e9;
+    color: #078743;
+}
+
+.stat.red {
+    background: #ffeaed;
+    color: #d92e46;
+}
+
+.stat.purple {
+    background: #eee7ff;
+    color: #7040d7;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e2ebf7;
+    border-radius: 17px;
+    padding: 20px;
+}
+
+.panel h3 {
+    margin-top: 0;
+}
+
+/* PRESENT AND ABSENT CHART */
+
+.attendance-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    min-height: 190px;
+}
+
+.donut {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.donut:before {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    background: white;
+    border-radius: 50%;
+}
+
+.donut-center {
+    position: relative;
+    text-align: center;
+}
+
+.donut-center strong {
+    display: block;
+    font-size: 25px;
+}
+
+.donut-center span {
+    font-size: 12px;
+    color: #687b99;
+}
+
+.legend {
+    display: grid;
+    gap: 13px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.legend span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+}
+
+.dot.blue {
+    background: var(--blue);
+}
+
+.dot.red {
+    background: var(--red);
+}
+
+/* QUICK ACTIONS */
+
+.quick-actions {
+    display: grid;
+    gap: 10px;
+}
+
+.quick-actions button {
+    padding: 12px;
+    border-radius: 10px;
+    background: white;
+    color: #16365f;
+    border: 1px solid #8bb9f6;
+    font-weight: bold;
+}
+
+.quick-actions button:first-child {
+    background: var(--blue);
+    color: white;
+}
+
+/* PAGES */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.section-head h2 {
+    margin: 0;
+}
+
+.section-head p {
+    color: #687b99;
+}
+
+.folders {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.folder {
+    background: white;
+    border: 1px solid #e1eaf6;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: left;
+    color: var(--text);
+}
+
+.folder:hover {
+    border-color: #83b7ff;
+}
+
+.folder-icon {
+    font-size: 32px;
+}
+
+.folder h3 {
+    margin: 10px 0 5px;
+}
+
+.folder p {
+    color: #687b99;
+    font-size: 13px;
+}
+
+.form-card {
+    max-width: 850px;
+    background: white;
+    border: 1px solid #e1eaf6;
+    border-radius: 17px;
+    padding: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.secondary {
+    background: white;
+    border: 1px solid #d4e1f1;
+    color: #214268;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-weight: bold;
+}
+
+/* TABLE */
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.toolbar input {
+    max-width: 220px;
+}
+
+.table-wrap {
+    overflow: auto;
+    background: white;
+    border: 1px solid #e2ebf7;
+    border-radius: 14px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 700px;
+}
+
+th, td {
+    text-align: left;
+    padding: 13px;
+    border-bottom: 1px solid #edf2f8;
+    font-size: 13px;
+}
+
+th {
+    background: #f5f8fd;
+    color: #506582;
+}
+
+.status {
+    padding: 5px 9px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.present {
+    background: #ddf8e8;
+    color: #078742;
+}
+
+.status.absent {
+    background: #ffeaed;
+    color: #d92e46;
+}
+
+.empty {
+    text-align: center;
+    color: #8291a7;
+    padding: 35px !important;
+}
+
+/* TIME IN / OUT */
+
+.time-card {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    border: 1px solid #e1eaf6;
+    border-radius: 22px;
+    padding: 30px;
+    text-align: center;
+}
+
+.time-card h2 {
+    font-size: 32px;
+    margin: 0 0 6px;
+}
+
+.time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    text-align: left;
+}
+
+.time-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.time-buttons button {
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 13px;
+    color: white;
+    font-weight: bold;
+}
+
+.time-in {
+    background: linear-gradient(100deg, #13ad55, #078b3e);
+}
+
+.time-out {
+    background: linear-gradient(100deg, #0870f5, #084fc7);
+}
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #092a55;
+    color: white;
+    padding: 14px 18px;
+    border-radius: 12px;
+}
+
+@media(max-width:950px) {
+    .login-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        min-height: 400px;
+    }
+
+    .app {
+        grid-template-columns: 190px 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .folders {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:620px) {
+    .app {
+        display: block;
+    }
+
+    .sidebar {
+        min-height: auto;
+    }
+
+    .nav {
+        display: flex;
+        overflow: auto;
+    }
+
+    .nav button {
+        white-space: nowrap;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main {
+        padding: 13px;
+    }
+
+    .form-grid,
+    .time-grid,
+    .time-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .folders {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .attendance-chart {
+        flex-wrap: wrap;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- ADMIN LOGIN -->
-<section id="loginPage" class="login-page">
-<div class="login-brand">
-<i class="fa-solid fa-calendar-check"></i>
-<h1>Digital Attendance System</h1>
-<h3>for Faculty and Staff</h3>
-<p>Track. Manage. Monitor.</p>
+<!-- LOGIN -->
+
+<div id="loginView" class="login-wrap">
+
+    <section class="hero">
+        <div>
+            <div class="hero-icon">🗓️</div>
+
+            <h1>Digital<br>Attendance System</h1>
+
+            <div class="welcome">Welcome</div>
+
+            <div class="people">
+                <div class="person"></div>
+                <div class="person girl"></div>
+            </div>
+
+            <div class="track">Track. Manage. Monitor.</div>
+        </div>
+    </section>
+
+    <section class="login-panel">
+        <div class="login-card">
+
+            <div class="shield">🔒</div>
+
+            <h2>Admin Login</h2>
+            <p class="sub">Sign in to access the dashboard</p>
+
+            <form id="loginForm">
+
+                <div class="field">
+                    <label>Admin Username</label>
+                    <input id="adminUsername"
+                           placeholder="Enter admin username"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label>Admin Password</label>
+
+                    <div class="password-wrap">
+                        <input id="adminPassword"
+                               type="password"
+                               placeholder="Enter admin password"
+                               required>
+
+                        <button class="eye"
+                                type="button"
+                                data-eye="adminPassword">◉</button>
+                    </div>
+                </div>
+
+                <div class="forgot">
+                    <button type="button" id="forgotBtn">
+                        🔐 Forgot Password?
+                    </button>
+                </div>
+
+                <button class="primary login-submit" type="submit">
+                    ↪ LOG IN
+                </button>
+
+            </form>
+
+            <div class="hint">
+                Digital Attendance System | Faculty and Staff
+            </div>
+
+        </div>
+    </section>
+
 </div>
-
-<div class="login-panel">
-<form id="loginForm" class="login-card">
-<i class="fa-solid fa-shield-halved" style="font-size:55px;color:#075be8"></i>
-<h2>Admin Login</h2>
-<p>Sign in to access the dashboard</p>
-
-<div class="field">
-<input id="adminUser" placeholder="Admin Username" required>
-</div>
-
-<div class="field">
-<input id="adminPass" type="password" placeholder="Admin Password" required>
-<i class="fa-solid fa-eye eye" onclick="toggleEye('adminPass',this)"></i>
-</div>
-
-<button class="login-submit">LOG IN</button>
-<p>Demo Login: admin / admin123</p>
-</form>
-</div>
-</section>
-
-<!-- SYSTEM -->
-<section id="app" class="app hidden">
-
-<aside class="sidebar">
-<div class="logo">
-<i class="fa-solid fa-graduation-cap"></i>
-<h3>Digital Attendance System</h3>
-<small>Admin Panel</small>
-</div>
-
-<nav class="nav">
-<button class="active" onclick="showPage('dashboard',this)">🏠 Home</button>
-<button onclick="showPage('registration',this)">👤 Employee Registration</button>
-<button onclick="showPage('attendance',this)">📋 Attendance Record</button>
-<button onclick="showPage('monthly',this)">📅 Monthly Record</button>
-<button class="logout" onclick="logout()">🚪 Log Out</button>
-</nav>
-</aside>
-
-<main class="main">
-
-<header class="topbar">
-<strong>Digital Attendance System</strong>
-<span id="todayLabel"></span>
-</header>
 
 <!-- DASHBOARD -->
-<section id="dashboard" class="page">
 
-<div class="banner">
-<h1>Welcome, Admin!</h1>
-<p>Here's today's attendance overview.</p>
+<div id="appView" class="app hidden">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+            <h2>Digital Attendance<br>System</h2>
+            <small>Admin Panel</small>
+        </div>
+
+        <nav class="nav">
+
+            <button class="active" data-page="home">⌂ Home</button>
+
+            <button data-page="register">♟ Employee Registration</button>
+
+            <button data-page="attendance">▣ Attendance Record</button>
+
+            <button data-page="monthly">▦ Monthly Record</button>
+
+            <button data-page="time">◷ Employee Time In/Out</button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="profile">👤 Welcome, Admin</div>
+            <button class="logout" id="logoutBtn">↪ Log Out</button>
+        </div>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <h1 id="pageWelcome">Welcome, Admin!</h1>
+                <p id="pageSubtitle">Here's today's attendance overview.</p>
+            </div>
+
+            <div>📅 <span id="todayLabel"></span> 🔔</div>
+
+        </header>
+
+        <!-- HOME -->
+
+        <section id="homePage" class="page active">
+
+            <div class="banner">
+                <h2>Today's Attendance</h2>
+                <p>Here’s your daily attendance overview.</p>
+            </div>
+
+            <div class="stats">
+
+                <div class="stat blue">
+                    <div class="symbol">👥</div>
+                    <div class="label">Employees</div>
+                    <div class="number" id="employeeCount">0</div>
+                </div>
+
+                <div class="stat green">
+                    <div class="symbol">✔</div>
+                    <div class="label">Present</div>
+                    <div class="number" id="presentCount">0</div>
+                </div>
+
+                <div class="stat red">
+                    <div class="symbol">✖</div>
+                    <div class="label">Absent</div>
+                    <div class="number" id="absentCount">0</div>
+                </div>
+
+                <div class="stat purple">
+                    <div class="symbol">◷</div>
+                    <div class="label">On Time</div>
+                    <div class="number" id="onTimeCount">0</div>
+                </div>
+
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+
+                    <h3>Today's Attendance</h3>
+
+                    <div class="attendance-chart">
+
+                        <div class="donut" id="donut">
+                            <div class="donut-center">
+                                <strong id="presentPercent">0%</strong>
+                                <span>Present</span>
+                            </div>
+                        </div>
+
+                        <div class="legend">
+                            <span>
+                                <i class="dot blue"></i>
+                                Present (<b id="legendPresent">0</b>)
+                            </span>
+
+                            <span>
+                                <i class="dot red"></i>
+                                Absent (<b id="legendAbsent">0</b>)
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <h3>Quick Actions</h3>
+
+                    <div class="quick-actions">
+
+                        <button data-go="register">＋ Register Employee</button>
+
+                        <button data-go="attendance">▣ View Attendance</button>
+
+                        <button data-go="monthly">▦ View Monthly Record</button>
+
+                        <button data-go="time">◷ Employee Time In / Out</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- EMPLOYEE REGISTRATION -->
+
+        <section id="registerPage" class="page">
+
+            <div class="section-head">
+                <div>
+                    <h2>Employee Registration</h2>
+                    <p>Register faculty or staff member.</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+
+                <form id="employeeForm">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>Employee ID *</label>
+                            <input id="employeeId" placeholder="Enter Employee ID" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Full Name *</label>
+                            <input id="employeeName" placeholder="Enter Full Name" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Password *</label>
+
+                            <div class="password-wrap">
+                                <input id="employeePassword"
+                                       type="password"
+                                       placeholder="Create Password"
+                                       required>
+
+                                <button class="eye"
+                                        type="button"
+                                        data-eye="employeePassword">◉</button>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Position *</label>
+
+                            <select id="employeePosition" required>
+                                <option value="">Select Position</option>
+                                <option>Faculty</option>
+                                <option>Staff</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Department *</label>
+
+                            <select id="employeeDepartment" required>
+                                <option value="">Select Department</option>
+                                <option>BSCRIM</option>
+                                <option>BSIT</option>
+                                <option>BSHM</option>
+                                <option>BSED</option>
+                                <option>BSBA</option>
+                                <option>BEED</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="primary" type="submit">▣ Save Employee</button>
+                        <button class="secondary" type="reset">↺ Cancel</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- ATTENDANCE RECORD -->
+
+        <section id="attendancePage" class="page">
+
+            <div class="section-head">
+                <div>
+                    <h2>Attendance Record</h2>
+                    <p>Select department folder.</p>
+                </div>
+
+                <button class="secondary" data-go="home">← Dashboard</button>
+            </div>
+
+            <div id="attendanceFolders" class="folders"></div>
+
+            <div id="attendanceDetail" class="hidden"></div>
+
+        </section>
+
+        <!-- MONTHLY RECORD -->
+
+        <section id="monthlyPage" class="page">
+
+            <div class="section-head">
+                <div>
+                    <h2>Monthly Record</h2>
+                    <p>Choose a department to view monthly attendance.</p>
+                </div>
+
+                <button class="secondary" data-go="home">← Dashboard</button>
+            </div>
+
+            <div id="monthlyFolders" class="folders"></div>
+
+            <div id="monthlyDetail" class="hidden"></div>
+
+        </section>
+
+        <!-- TIME IN / TIME OUT -->
+
+        <section id="timePage" class="page">
+
+            <div class="time-card">
+
+                <div style="font-size:48px;color:#0961e8">◷</div>
+
+                <h2>Employee Attendance</h2>
+
+                <p class="sub">Time In and Time Out</p>
+
+                <div class="time-grid">
+
+                    <div class="field">
+                        <label>Employee ID</label>
+                        <input id="punchId" placeholder="Enter Employee ID">
+                    </div>
+
+                    <div class="field">
+                        <label>Password</label>
+
+                        <div class="password-wrap">
+                            <input id="punchPassword"
+                                   type="password"
+                                   placeholder="Enter Password">
+
+                            <button class="eye"
+                                    type="button"
+                                    data-eye="punchPassword">◉</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="time-buttons">
+
+                    <button class="time-in" id="timeInBtn">
+                        ↻ TIME IN
+                    </button>
+
+                    <button class="time-out" id="timeOutBtn">
+                        ↪ TIME OUT
+                    </button>
+
+                </div>
+
+                <p style="font-weight:bold;font-style:italic;margin-top:20px">
+                    Be On Time. Be Productive.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </div>
-
-<div class="stats">
-<div class="stat">
-<i class="fa-solid fa-users"></i>
-<h4>Employees</h4>
-<strong id="countEmployees">0</strong>
-</div>
-
-<div class="stat green">
-<i class="fa-solid fa-circle-check"></i>
-<h4>Present</h4>
-<strong id="countPresent">0</strong>
-</div>
-
-<div class="stat red">
-<i class="fa-solid fa-circle-xmark"></i>
-<h4>Absent</h4>
-<strong id="countAbsent">0</strong>
-</div>
-
-<div class="stat purple">
-<i class="fa-solid fa-clock"></i>
-<h4>On Time</h4>
-<strong id="countOnTime">0</strong>
-</div>
-</div>
-
-<div class="quick">
-<h2>Quick Actions</h2>
-<div class="quick-buttons">
-<button onclick="showPage('registration')">Register Employee</button>
-<button onclick="showPage('attendance')">View Attendance</button>
-<button onclick="showPage('monthly')">View Monthly Record</button>
-</div>
-</div>
-</section>
-
-<!-- EMPLOYEE REGISTRATION -->
-<section id="registration" class="page hidden">
-
-<h1>Employee Registration</h1>
-<p>Add new faculty or staff member</p>
-
-<form id="employeeForm" class="panel">
-
-<div class="form-grid">
-
-<div>
-<label class="form-label">Employee ID *</label>
-<div class="field">
-<input id="empId" required placeholder="Enter Employee ID">
-</div>
-</div>
-
-<div>
-<label class="form-label">Full Name *</label>
-<div class="field">
-<input id="empName" required placeholder="Enter Full Name">
-</div>
-</div>
-
-<div>
-<label class="form-label">Password *</label>
-<div class="field">
-<input id="empPassword" type="password" required placeholder="Enter Password">
-<i class="fa-solid fa-eye eye" onclick="toggleEye('empPassword',this)"></i>
-</div>
-</div>
-
-<div>
-<label class="form-label">Position *</label>
-<div class="field">
-<select id="empPosition" required>
-<option value="">Select Position</option>
-<option>Faculty</option>
-<option>Staff</option>
-</select>
-</div>
-</div>
-
-<div>
-<label class="form-label">Department *</label>
-<div class="field">
-<select id="empDepartment" required>
-<option value="">Select Department</option>
-<option>BSCRIM</option>
-<option>BSIT</option>
-<option>BSHM</option>
-<option>BSED</option>
-<option>BSBA</option>
-<option>BEED</option>
-</select>
-</div>
-</div>
-
-</div>
-
-<div class="actions">
-<button class="primary">Save Employee</button>
-<button type="reset" class="secondary">Cancel</button>
-</div>
-</form>
-</section>
-
-<!-- TIME IN / TIME OUT -->
-<section id="timePage" class="page hidden">
-<div class="attendance-box">
-<i class="fa-solid fa-clock clock"></i>
-<h1>Employee Attendance</h1>
-<h3>Time In and Time Out</h3>
-
-<div class="form-grid">
-<div class="field">
-<input id="timeEmpId" placeholder="Employee ID">
-</div>
-
-<div class="field">
-<input id="timePassword" type="password" placeholder="Password">
-<i class="fa-solid fa-eye eye" onclick="toggleEye('timePassword',this)"></i>
-</div>
-</div>
-
-<div class="time-buttons">
-<button class="timein" onclick="punch('in')">TIME IN</button>
-<button class="timeout" onclick="punch('out')">TIME OUT</button>
-</div>
-</div>
-</section>
-
-<!-- ATTENDANCE RECORD -->
-<section id="attendance" class="page hidden">
-<h1>Attendance Record</h1>
-<p>Click a department folder to view its records</p>
-
-<div id="attendanceFolders" class="departments"></div>
-
-<div id="attendanceSub" class="hidden">
-<button class="back" onclick="backFolders('attendance')">⬅ Back to Departments</button>
-
-<h2 id="attendanceTitle"></h2>
-
-<div class="filter">
-<label>Select Date:</label>
-<input id="attendanceDate" type="date" onchange="renderAttendanceTable()">
-</div>
-
-<div id="attendanceTable" class="table-wrap"></div>
-</div>
-</section>
-
-<!-- MONTHLY RECORD -->
-<section id="monthly" class="page hidden">
-<h1>Monthly Record</h1>
-<p>Click a department folder to view monthly attendance</p>
-
-<div id="monthlyFolders" class="departments"></div>
-
-<div id="monthlySub" class="hidden">
-<button class="back" onclick="backFolders('monthly')">⬅ Back to Departments</button>
-
-<h2 id="monthlyTitle"></h2>
-
-<div class="filter">
-<label>Select Month:</label>
-<input id="monthlyDate" type="month" onchange="renderMonthlyTable()">
-</div>
-
-<div id="monthlyTable" class="table-wrap"></div>
-</div>
-</section>
-
-</main>
-</section>
 
 <div id="toast" class="toast hidden"></div>
 
 <script>
-const DEPARTMENTS=['BSCRIM','BSIT','BSHM','BSED','BSBA','BEED'];
 
-function read(key){
-return JSON.parse(localStorage.getItem(key)||'[]');
+const DEPARTMENTS = [
+    "BSCRIM",
+    "BSIT",
+    "BSHM",
+    "BSED",
+    "BSBA",
+    "BEED"
+];
+
+const $ = id => document.getElementById(id);
+
+let employees = JSON.parse(localStorage.getItem("das_employees") || "[]");
+let records = JSON.parse(localStorage.getItem("das_records") || "[]");
+
+function saveData() {
+    localStorage.setItem("das_employees", JSON.stringify(employees));
+    localStorage.setItem("das_records", JSON.stringify(records));
 }
 
-function save(key,value){
-localStorage.setItem(key,JSON.stringify(value));
+function today() {
+    const d = new Date();
+
+    return d.getFullYear() + "-" +
+        String(d.getMonth() + 1).padStart(2, "0") + "-" +
+        String(d.getDate()).padStart(2, "0");
 }
 
-let selectedAttendanceDept='';
-let selectedMonthlyDept='';
-
-function today(){
-let d=new Date();
-return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-
-document.getElementById('todayLabel').textContent=new Date().toLocaleDateString();
-document.getElementById('attendanceDate').value=today();
-document.getElementById('monthlyDate').value=today().slice(0,7);
-
-function toast(message){
-let t=document.getElementById('toast');
-t.textContent=message;
-t.classList.remove('hidden');
-setTimeout(()=>t.classList.add('hidden'),2500);
-}
-
-function toggleEye(id,icon){
-let input=document.getElementById(id);
-input.type=input.type==='password'?'text':'password';
-icon.classList.toggle('fa-eye');
-icon.classList.toggle('fa-eye-slash');
-}
-
-document.getElementById('loginForm').addEventListener('submit',function(e){
-e.preventDefault();
-
-if(document.getElementById('adminUser').value==='admin' &&
-document.getElementById('adminPass').value==='admin123'){
-
-document.getElementById('loginPage').classList.add('hidden');
-document.getElementById('app').classList.remove('hidden');
-refreshDashboard();
-toast('Welcome Admin!');
-
-}else{
-toast('Invalid username or password');
-}
-});
-
-function logout(){
-document.getElementById('app').classList.add('hidden');
-document.getElementById('loginPage').classList.remove('hidden');
-document.getElementById('loginForm').reset();
-}
-
-function showPage(id,btn){
-document.querySelectorAll('.main .page').forEach(p=>p.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-
-document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-if(btn)btn.classList.add('active');
-
-if(id==='attendance')buildFolders('attendance');
-if(id==='monthly')buildFolders('monthly');
-if(id==='dashboard')refreshDashboard();
-}
-
-document.getElementById('employeeForm').addEventListener('submit',function(e){
-e.preventDefault();
-
-let employees=read('das_employees');
-let id=document.getElementById('empId').value.trim();
-
-if(employees.some(x=>x.id===id)){
-toast('Employee ID already exists');
-return;
-}
-
-employees.push({
-id:id,
-name:document.getElementById('empName').value.trim(),
-password:document.getElementById('empPassword').value,
-position:document.getElementById('empPosition').value,
-department:document.getElementById('empDepartment').value
-});
-
-save('das_employees',employees);
-this.reset();
-refreshDashboard();
-toast('Employee saved successfully');
-});
-
-function buildFolders(type){
-let root=document.getElementById(type==='attendance'?'attendanceFolders':'monthlyFolders');
-
-root.innerHTML=DEPARTMENTS.map(dept=>{
-let count=read('das_employees').filter(e=>e.department===dept).length;
-
-return `
-<button class="folder" onclick="openDepartment('${type}','${dept}')">
-<i class="fa-solid fa-folder"></i>
-<h3>${dept}</h3>
-<p>${count} employee(s)</p>
-</button>`;
-}).join('');
-}
-
-function openDepartment(type,dept){
-
-if(type==='attendance'){
-selectedAttendanceDept=dept;
-
-document.getElementById('attendanceFolders').classList.add('hidden');
-document.getElementById('attendanceSub').classList.remove('hidden');
-
-document.getElementById('attendanceTitle').textContent=dept+' Attendance Records';
-
-renderAttendanceTable();
-
-}else{
-selectedMonthlyDept=dept;
-
-document.getElementById('monthlyFolders').classList.add('hidden');
-document.getElementById('monthlySub').classList.remove('hidden');
-
-document.getElementById('monthlyTitle').textContent=dept+' Monthly Attendance';
-
-renderMonthlyTable();
-}
-}
-
-function backFolders(type){
-if(type==='attendance'){
-document.getElementById('attendanceSub').classList.add('hidden');
-document.getElementById('attendanceFolders').classList.remove('hidden');
-}else{
-document.getElementById('monthlySub').classList.add('hidden');
-document.getElementById('monthlyFolders').classList.remove('hidden');
-}
-}
-
-function renderAttendanceTable(){
-let date=document.getElementById('attendanceDate').value;
-
-let records=read('das_attendance').filter(r=>
-r.department===selectedAttendanceDept&&r.date===date
+$("todayLabel").textContent = new Date().toLocaleDateString(
+    undefined,
+    { year: "numeric", month: "long", day: "numeric" }
 );
 
-displayTable(records,'attendanceTable');
+function notify(message) {
+    const toast = $("toast");
+
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+
+    setTimeout(() => toast.classList.add("hidden"), 3000);
 }
 
-function renderMonthlyTable(){
-let month=document.getElementById('monthlyDate').value;
+/* NAVIGATION */
 
-let records=read('das_attendance').filter(r=>
-r.department===selectedMonthlyDept&&r.date.startsWith(month)
-);
+function showPage(page) {
 
-displayTable(records,'monthlyTable');
+    document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("active");
+    });
+
+    $(page + "Page").classList.add("active");
+
+    document.querySelectorAll(".nav button").forEach(b => {
+        b.classList.toggle("active", b.dataset.page === page);
+    });
+
+    const titles = {
+        home: ["Welcome, Admin!", "Here's today's attendance overview."],
+        register: ["Employee Registration", "Register faculty or staff."],
+        attendance: ["Attendance Record", "View attendance by department."],
+        monthly: ["Monthly Record", "View monthly attendance."],
+        time: ["Employee Attendance", "Time In and Time Out."]
+    };
+
+    $("pageWelcome").textContent = titles[page][0];
+    $("pageSubtitle").textContent = titles[page][1];
+
+    if (page === "attendance") renderFolders("attendance");
+    if (page === "monthly") renderFolders("monthly");
 }
 
-function displayTable(records,target){
-let container=document.getElementById(target);
-
-if(records.length===0){
-container.innerHTML='<div class="empty">No attendance records found.</div>';
-return;
-}
-
-container.innerHTML=`
-<table>
-<thead>
-<tr>
-<th>Employee ID</th>
-<th>Full Name</th>
-<th>Department</th>
-<th>Date</th>
-<th>Time In</th>
-<th>Time Out</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-${records.map(r=>`
-<tr>
-<td>${r.id}</td>
-<td>${r.name}</td>
-<td>${r.department}</td>
-<td>${r.date}</td>
-<td>${r.timeIn||'—'}</td>
-<td>${r.timeOut||'—'}</td>
-<td>${r.status||'Present'}</td>
-</tr>
-`).join('')}
-</tbody>
-</table>`;
-}
-
-function punch(kind){
-
-let id=document.getElementById('timeEmpId').value.trim();
-let password=document.getElementById('timePassword').value;
-
-let employee=read('das_employees').find(e=>
-e.id===id&&e.password===password
-);
-
-if(!employee){
-toast('Invalid Employee ID or Password');
-return;
-}
-
-let records=read('das_attendance');
-let date=today();
-
-let row=records.find(r=>r.id===id&&r.date===date);
-
-let now=new Date().toLocaleTimeString('en-US',{
-hour:'2-digit',
-minute:'2-digit',
-hour12:true
+document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => showPage(button.dataset.page));
 });
 
-if(kind==='in'){
+document.querySelectorAll("[data-go]").forEach(button => {
+    button.addEventListener("click", () => showPage(button.dataset.go));
+});
 
-if(row&&row.timeIn){
-toast('Time In already recorded');
-return;
+/* PASSWORD EYE */
+
+document.querySelectorAll("[data-eye]").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const input = $(button.dataset.eye);
+
+        input.type = input.type === "password" ? "text" : "password";
+
+        button.textContent = input.type === "password" ? "◉" : "◎";
+
+    });
+
+});
+
+/* ADMIN LOGIN */
+
+$("loginForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const username = $("adminUsername").value.trim();
+    const password = $("adminPassword").value;
+
+    if (username === "admin" && password === "admin123") {
+
+        $("loginView").classList.add("hidden");
+        $("appView").classList.remove("hidden");
+
+        showPage("home");
+        refreshDashboard();
+
+        notify("Welcome, Admin!");
+
+    } else {
+
+        notify("Incorrect username or password.");
+
+    }
+
+});
+
+/* FORGOT PASSWORD */
+
+$("forgotBtn").addEventListener("click", function() {
+
+    notify("Contact the system administrator to reset the admin password.");
+
+});
+
+/* LOGOUT */
+
+$("logoutBtn").addEventListener("click", function() {
+
+    $("appView").classList.add("hidden");
+    $("loginView").classList.remove("hidden");
+
+    $("adminPassword").value = "";
+
+    notify("You have logged out.");
+
+});
+
+/* EMPLOYEE REGISTRATION */
+
+$("employeeForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const id = $("employeeId").value.trim();
+
+    const duplicate = employees.some(
+        emp => emp.id.toLowerCase() === id.toLowerCase()
+    );
+
+    if (duplicate) {
+        notify("Employee ID already registered.");
+        return;
+    }
+
+    const employee = {
+
+        id: id,
+
+        name: $("employeeName").value.trim(),
+
+        password: $("employeePassword").value,
+
+        position: $("employeePosition").value,
+
+        department: $("employeeDepartment").value
+
+    };
+
+    employees.push(employee);
+
+    saveData();
+
+    this.reset();
+
+    refreshDashboard();
+
+    notify("Employee registered successfully.");
+
+});
+
+/* TIME IN AND TIME OUT */
+
+function punch(type) {
+
+    const id = $("punchId").value.trim();
+    const password = $("punchPassword").value;
+
+    const employee = employees.find(emp =>
+        emp.id.toLowerCase() === id.toLowerCase() &&
+        emp.password === password
+    );
+
+    if (!employee) {
+        notify("Incorrect Employee ID or Password.");
+        return;
+    }
+
+    let record = records.find(r =>
+        r.employeeId === employee.id &&
+        r.date === today()
+    );
+
+    if (!record) {
+
+        record = {
+            employeeId: employee.id,
+            name: employee.name,
+            department: employee.department,
+            position: employee.position,
+            date: today(),
+            timeIn: "",
+            timeOut: "",
+            status: "Absent"
+        };
+
+        records.push(record);
+
+    }
+
+    const now = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+    if (type === "in") {
+
+        if (record.timeIn) {
+            notify("You already recorded Time In today.");
+            return;
+        }
+
+        record.timeIn = now;
+        record.status = "Present";
+
+        notify("Time In recorded: " + now);
+
+    } else {
+
+        if (!record.timeIn) {
+            notify("Please Time In first.");
+            return;
+        }
+
+        if (record.timeOut) {
+            notify("You already recorded Time Out today.");
+            return;
+        }
+
+        record.timeOut = now;
+
+        notify("Time Out recorded: " + now);
+
+    }
+
+    saveData();
+
+    refreshDashboard();
+
 }
 
-if(!row){
-row={
-id:employee.id,
-name:employee.name,
-department:employee.department,
-date:date,
-timeIn:'',
-timeOut:'',
-status:'Present'
-};
-records.push(row);
+$("timeInBtn").addEventListener("click", () => punch("in"));
+
+$("timeOutBtn").addEventListener("click", () => punch("out"));
+
+/* DASHBOARD ATTENDANCE COUNTS */
+
+function refreshDashboard() {
+
+    const dailyRecords = records.filter(r =>
+        r.date === today() && r.timeIn
+    );
+
+    const present = dailyRecords.length;
+
+    const absent = Math.max(employees.length - present, 0);
+
+    const percent = employees.length
+        ? Math.round((present / employees.length) * 100)
+        : 0;
+
+    $("employeeCount").textContent = employees.length;
+
+    $("presentCount").textContent = present;
+
+    $("absentCount").textContent = absent;
+
+    $("onTimeCount").textContent = present;
+
+    $("legendPresent").textContent = present;
+
+    $("legendAbsent").textContent = absent;
+
+    $("presentPercent").textContent = percent + "%";
+
+    const bluePercentage = employees.length
+        ? (present / employees.length) * 100
+        : 0;
+
+    $("donut").style.background =
+        `conic-gradient(var(--blue) 0% ${bluePercentage}%, var(--red) ${bluePercentage}% 100%)`;
+
 }
 
-row.timeIn=now;
-row.status='Present';
-toast('Time In recorded: '+now);
+/* DEPARTMENT FOLDERS */
 
-}else{
+function renderFolders(type) {
 
-if(!row||!row.timeIn){
-toast('Please Time In first');
-return;
+    const container = $(
+        type === "attendance"
+            ? "attendanceFolders"
+            : "monthlyFolders"
+    );
+
+    const detail = $(
+        type === "attendance"
+            ? "attendanceDetail"
+            : "monthlyDetail"
+    );
+
+    detail.classList.add("hidden");
+
+    container.classList.remove("hidden");
+
+    container.innerHTML = DEPARTMENTS.map(dep => {
+
+        const count = employees.filter(
+            emp => emp.department === dep
+        ).length;
+
+        return `
+            <button class="folder" data-department="${dep}">
+                <div class="folder-icon">📁</div>
+                <h3>${dep}</h3>
+                <p>${count} registered employees</p>
+            </button>
+        `;
+
+    }).join("");
+
+    container.querySelectorAll("[data-department]").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            openDepartment(type, button.dataset.department);
+
+        });
+
+    });
+
 }
 
-if(row.timeOut){
-toast('Time Out already recorded');
-return;
+/* DEPARTMENT RECORDS */
+
+function openDepartment(type, department) {
+
+    const container = $(
+        type === "attendance"
+            ? "attendanceFolders"
+            : "monthlyFolders"
+    );
+
+    const detail = $(
+        type === "attendance"
+            ? "attendanceDetail"
+            : "monthlyDetail"
+    );
+
+    container.classList.add("hidden");
+
+    detail.classList.remove("hidden");
+
+    if (type === "attendance") {
+
+        detail.innerHTML = `
+            <div class="section-head">
+                <div>
+                    <h2>📁 ${department} Attendance</h2>
+                    <p>Attendance records for ${department}</p>
+                </div>
+
+                <button class="secondary" id="backFolders">
+                    ← Departments
+                </button>
+            </div>
+
+            <div class="toolbar">
+                <label>Select Date:</label>
+                <input type="date" id="attendanceDate" value="${today()}">
+
+                <button class="secondary" id="showAllDates">
+                    All Dates
+                </button>
+            </div>
+
+            <div id="recordTable"></div>
+        `;
+
+        $("backFolders").onclick = () => renderFolders(type);
+
+        $("attendanceDate").onchange = () => {
+            renderAttendanceTable(
+                department,
+                $("attendanceDate").value
+            );
+        };
+
+        $("showAllDates").onclick = () => {
+            renderAttendanceTable(department, "all");
+        };
+
+        renderAttendanceTable(department, today());
+
+    } else {
+
+        detail.innerHTML = `
+            <div class="section-head">
+                <div>
+                    <h2>📁 ${department} Monthly Record</h2>
+                    <p>Monthly attendance records for ${department}</p>
+                </div>
+
+                <button class="secondary" id="backFolders">
+                    ← Departments
+                </button>
+            </div>
+
+            <div class="toolbar">
+                <label>Select Month:</label>
+                <input type="month" id="monthFilter" value="${today().slice(0,7)}">
+
+                <button class="secondary" id="showAllMonths">
+                    All Months
+                </button>
+            </div>
+
+            <div id="recordTable"></div>
+        `;
+
+        $("backFolders").onclick = () => renderFolders(type);
+
+        $("monthFilter").onchange = () => {
+            renderMonthlyTable(
+                department,
+                $("monthFilter").value
+            );
+        };
+
+        $("showAllMonths").onclick = () => {
+            renderMonthlyTable(department, "all");
+        };
+
+        renderMonthlyTable(department, today().slice(0,7));
+
+    }
+
 }
 
-row.timeOut=now;
-toast('Time Out recorded: '+now);
+/* TABLE DISPLAY */
+
+function tableHtml(rows) {
+
+    if (!rows.length) {
+
+        return `
+            <div class="table-wrap">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="empty">
+                                No attendance records found.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+    }
+
+    return `
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    ${rows.map(record => `
+                        <tr>
+                            <td>${escapeHtml(record.employeeId)}</td>
+                            <td>${escapeHtml(record.name)}</td>
+                            <td>${escapeHtml(record.department)}</td>
+                            <td>${record.date}</td>
+                            <td>${record.timeIn || "—"}</td>
+                            <td>${record.timeOut || "—"}</td>
+
+                            <td>
+                                <span class="status ${
+                                    record.status === "Present"
+                                    ? "present"
+                                    : "absent"
+                                }">
+                                    ${record.status}
+                                </span>
+                            </td>
+                        </tr>
+                    `).join("")}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    `;
+
 }
 
-save('das_attendance',records);
-refreshDashboard();
+function renderAttendanceTable(department, date) {
+
+    const rows = records.filter(record =>
+
+        record.department === department &&
+
+        (date === "all" || record.date === date)
+
+    ).sort((a,b) => b.date.localeCompare(a.date));
+
+    $("recordTable").innerHTML = tableHtml(rows);
+
 }
 
-function refreshDashboard(){
+function renderMonthlyTable(department, month) {
 
-let employees=read('das_employees');
-let records=read('das_attendance').filter(r=>r.date===today());
+    const rows = records.filter(record =>
 
-let present=records.filter(r=>r.timeIn).length;
+        record.department === department &&
 
-document.getElementById('countEmployees').textContent=employees.length;
-document.getElementById('countPresent').textContent=present;
-document.getElementById('countAbsent').textContent=Math.max(0,employees.length-present);
-document.getElementById('countOnTime').textContent=present;
+        (month === "all" || record.date.startsWith(month))
+
+    ).sort((a,b) => b.date.localeCompare(a.date));
+
+    $("recordTable").innerHTML = tableHtml(rows);
+
 }
+
+/* BASIC HTML ESCAPING */
+
+function escapeHtml(text) {
+
+    return String(text).replace(/[&<>"']/g, character => {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[character];
+
+    });
+
+}
+
 </script>
 
 </body>
