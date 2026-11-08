@@ -1,0 +1,513 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Record | Digital Attendance System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .monthly-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #102b50;
+            color: white;
+            padding: 25px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 35px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            color: #dce7f5;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2463b4;
+            color: white;
+        }
+
+        .logout-link {
+            margin-top: auto;
+            background: #c0392b;
+        }
+
+        .monthly-main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #102b50;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .page-header p {
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .monthly-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 25px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .filter-group label {
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .filter-button,
+        .export-button {
+            padding: 11px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #2463b4;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .filter-button:hover,
+        .export-button:hover {
+            background: #174a88;
+        }
+
+        .summary-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-item {
+            background: #edf4ff;
+            border-radius: 10px;
+            padding: 18px 22px;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .summary-item h3 {
+            color: #64748b;
+            font-size: 13px;
+            margin: 0 0 10px;
+        }
+
+        .summary-item .value {
+            color: #174a88;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #edf4ff;
+        }
+
+        th {
+            color: #174a88;
+            text-align: left;
+            padding: 14px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .empty-message {
+            padding: 25px;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 700px) {
+            .monthly-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .monthly-main {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="monthly-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            Digital Attendance System
+        </div>
+
+        <a href="dashboard.html">⌂ Home</a>
+        <a href="employee.html">▣ Employees</a>
+        <a href="employee.html#registration">＋ Employee Registration</a>
+        <a href="attendance.html">◷ Attendance Record</a>
+        <a href="monthly-record.html" class="active">▤ Monthly Record</a>
+
+        <a href="#" class="logout-link" onclick="logout(); return false;">
+            ↪ Logout
+        </a>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="monthly-main">
+
+        <header class="page-header">
+            <h1>Monthly Attendance Record</h1>
+            <p>View and monitor employee attendance by month and department.</p>
+        </header>
+
+        <section class="monthly-card">
+
+            <!-- FILTERS -->
+            <div class="filters">
+
+                <div class="filter-group">
+                    <label for="monthlyDepartment">Department</label>
+
+                    <select id="monthlyDepartment">
+                        <option value="All">All Departments</option>
+                        <option value="BSCRIM">BSCRIM</option>
+                        <option value="BSIT">BSIT</option>
+                        <option value="BSHM">BSHM</option>
+                        <option value="BSED">BSED</option>
+                        <option value="BSBA">BSBA</option>
+                        <option value="BEED">BEED</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="monthlyMonth">Select Month</label>
+                    <input type="month" id="monthlyMonth">
+                </div>
+
+                <button class="filter-button" onclick="loadMonthlyRecords()">
+                    View Records
+                </button>
+
+                <button class="export-button" onclick="exportMonthlyCSV()">
+                    Export CSV
+                </button>
+
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="summary-box">
+
+                <div class="summary-item">
+                    <h3>Total Attendance Records</h3>
+                    <div class="value" id="monthlyTotalRecords">0</div>
+                </div>
+
+                <div class="summary-item">
+                    <h3>Total Present</h3>
+                    <div class="value" id="monthlyPresent">0</div>
+                </div>
+
+                <div class="summary-item">
+                    <h3>Employees Included</h3>
+                    <div class="value" id="monthlyEmployees">0</div>
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="monthlyTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-message">
+                                Select a month to view attendance records.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+    let currentMonthlyRecords = [];
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        if (typeof checkAdminSession === "function") {
+            checkAdminSession();
+        }
+
+        const monthInput = document.getElementById("monthlyMonth");
+
+        const now = new Date();
+
+        monthInput.value =
+            now.getFullYear() + "-" +
+            String(now.getMonth() + 1).padStart(2, "0");
+
+        loadMonthlyRecords();
+
+    });
+
+    function loadMonthlyRecords() {
+
+        const selectedMonth =
+            document.getElementById("monthlyMonth").value;
+
+        const selectedDepartment =
+            document.getElementById("monthlyDepartment").value;
+
+        if (!selectedMonth) {
+            alert("Please select a month.");
+            return;
+        }
+
+        const attendance = getAttendance();
+
+        currentMonthlyRecords = attendance.filter(record => {
+
+            const matchesMonth =
+                record.date.substring(0, 7) === selectedMonth;
+
+            const matchesDepartment =
+                selectedDepartment === "All" ||
+                record.department === selectedDepartment;
+
+            return matchesMonth && matchesDepartment;
+
+        });
+
+        renderMonthlyRecords();
+        updateMonthlySummary();
+
+    }
+
+    function renderMonthlyRecords() {
+
+        const tableBody =
+            document.getElementById("monthlyTableBody");
+
+        tableBody.innerHTML = "";
+
+        if (currentMonthlyRecords.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty-message">
+                        No attendance records found for the selected month.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        currentMonthlyRecords.forEach(record => {
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${escapeHTML(record.employeeID)}</td>
+                <td>${escapeHTML(record.employeeName)}</td>
+                <td>${escapeHTML(record.department)}</td>
+                <td>${escapeHTML(record.date)}</td>
+                <td>${escapeHTML(record.timeIn || "-")}</td>
+                <td>${escapeHTML(record.timeOut || "-")}</td>
+                <td>${escapeHTML(record.status)}</td>
+            `;
+
+            tableBody.appendChild(row);
+
+        });
+
+    }
+
+    function updateMonthlySummary() {
+
+        const totalRecords = currentMonthlyRecords.length;
+
+        const totalPresent = currentMonthlyRecords.filter(
+            record => record.status === "Present"
+        ).length;
+
+        const uniqueEmployees = new Set(
+            currentMonthlyRecords.map(record => record.employeeID)
+        ).size;
+
+        document.getElementById("monthlyTotalRecords").textContent =
+            totalRecords;
+
+        document.getElementById("monthlyPresent").textContent =
+            totalPresent;
+
+        document.getElementById("monthlyEmployees").textContent =
+            uniqueEmployees;
+
+    }
+
+    function exportMonthlyCSV() {
+
+        if (currentMonthlyRecords.length === 0) {
+            alert("There are no monthly records to export.");
+            return;
+        }
+
+        const headers = [
+            "Employee ID",
+            "Employee Name",
+            "Department",
+            "Date",
+            "Time In",
+            "Time Out",
+            "Status"
+        ];
+
+        const rows = currentMonthlyRecords.map(record => [
+            record.employeeID,
+            record.employeeName,
+            record.department,
+            record.date,
+            record.timeIn || "",
+            record.timeOut || "",
+            record.status
+        ]);
+
+        const csvContent = [headers, ...rows]
+            .map(row =>
+                row.map(value =>
+                    '"' + String(value).replace(/"/g, '""') + '"'
+                ).join(",")
+            )
+            .join("\n");
+
+        const blob = new Blob(
+            ["\uFEFF" + csvContent],
+            { type: "text/csv;charset=utf-8;" }
+        );
+
+        const link = document.createElement("a");
+
+        link.href = URL.createObjectURL(blob);
+
+        link.download =
+            "Monthly_Attendance_" +
+            document.getElementById("monthlyMonth").value +
+            ".csv";
+
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+
+    }
+</script>
+
+</body>
+</html>
